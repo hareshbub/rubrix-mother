@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUBRIX TECHNOLOGIES | AI-Native Judge</title>
+    <style>
+        :root {
+            --bg-base: #030014;
+            --primary: #6366f1; /* Indigo */
+            --secondary: #ec4899; /* Pink */
+            --accent: #06b6d4; /* Cyan */
+            --text-light: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 3D Glowing Background Orbs */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+        body::before {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.4), transparent 70%);
+        }
+
+        body::after {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.3), transparent 70%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 3D Button Style */
+        .btn-3d {
+            display: inline-block;
+            background: linear-gradient(145deg, #818cf8, #4f46e5);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            /* 3D Depth via Shadows */
+            box-shadow:
+                inset 0 3px 0 rgba(255, 255, 255, 0.3), /* Top highlight */
+                inset 0 -3px 0 rgba(0, 0, 0, 0.2),      /* Bottom shadow */
+                0 10px 20px rgba(99, 102, 241, 0.4);    /* Outer glow/drop shadow */
+            position: relative;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+                0 15px 25px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-3d:active {
+            transform: translateY(2px);
+            box-shadow:
+                inset 0 2px 0 rgba(0, 0, 0, 0.2),
+                0 5px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 5% 6rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            /* 3D Metallic Text Gradient */
+            background: linear-gradient(to bottom right, #ffffff 0%, #cbd5e1 50%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grid Layouts for Sections */
+        .section-container {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* 3D Glassmorphism Cards */
+        .card-3d {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            /* 3D lighting borders */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            box-shadow:
+                0 25px 45px rgba(0,0,0,0.5),
+                0 0 20px rgba(99, 102, 241, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Inner Card Gradient Elements */
+        .card-icon-gradient {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .card-3d h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-3d p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        ul.feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        ul.feature-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.8rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        ul.feature-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            margin-top: 4rem;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.1rem; }
+            .card-3d:hover { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">RUBRIX<span>.</span></div>
+        <a href="pro.html" class="btn-3d">Launch Prototype</a>
+    </header>
+
+    <section class="hero">
+        <h1>Democratizing Evaluation with AI-Native Judging</h1>
+        <p>Current judging systems are a blackbox. We are making evaluation systematized, deeply personal, and infinitely scalable through AI.</p>
+        <a href="pro.html" class="btn-3d" style="margin-top: 1rem;">Test the Prototype</a>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">The Problem We Solve</h2>
+        <div class="grid-3">
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #f43f5e, #e11d48);"></div>
+                <h3>The Blackbox Effect</h3>
+                <p>In most current systems, judging is a blackbox. Participants receive scores without transparent, actionable feedback on their architecture or code.</p>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #a855f7, #7e22ce);"></div>
+                <h3>Zero Personal Connection</h3>
+                <p>Judges evaluate a project in a vacuum. Current systems lack the context to analyze a builder's unique portfolio, background, and growth trajectory.</p>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #eab308, #ca8a04);"></div>
+                <h3>Judge Fatigue</h3>
+                <p>Human evaluators get tired, and maintaining consistency across hundreds of teams is impossible. As events scale, evaluation quality plummets.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">Current Focus: The Pilot Batch</h2>
+        <div class="grid-3">
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);"></div>
+                <h3>60 Member Pilot</h3>
+                <p>We are currently running an exclusive pilot batch of 60 members to rigorously test our AI logic, collect data, and prove our concept in real environments.</p>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #10b981, #047857);"></div>
+                <h3>Pilot Deliverables</h3>
+                <ul class="feature-list">
+                    <li>Fully working AI prototype</li>
+                    <li>Secure QR certificates to 30 teams</li>
+                    <li>Extensive bug finding & hardening</li>
+                </ul>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #06b6d4, #0e7490);"></div>
+                <h3>Judge as a Service</h3>
+                <p>Post-pilot, we envision structuring massive hackathons, transitioning from a single-event tool to an enterprise-grade evaluation API.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">Business Model & Roadmap</h2>
+        <div class="grid-3">
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);"></div>
+                <h3>Revenue Streams</h3>
+                <ul class="feature-list">
+                    <li>Per-head participant licensing</li>
+                    <li>Premium Event sponsorships</li>
+                    <li>Talent matching & Internships</li>
+                </ul>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #f97316, #c2410c);"></div>
+                <h3>Phase 1: Prove</h3>
+                <p>Utilize regional hackathons to prove our AI logic and workflow, building trust and verifiable performance with the initial pilot batch.</p>
+            </div>
+            <div class="card-3d">
+                <div class="card-icon-gradient" style="background: linear-gradient(135deg, #14b8a6, #0f766e);"></div>
+                <h3>Phase 2: Scale</h3>
+                <p>Deploy "Judge as a Service" to national and global structured hackathons, creating the new gold standard for technical evaluation.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Rubrix Technologies. All rights reserved. | Building the future of technical evaluation.</p>
+    </footer>
+
+</body>
+</html>
